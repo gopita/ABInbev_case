@@ -41,8 +41,8 @@ The platform comes with pre-configured user accounts for demonstration purposes:
   - Admin users are restricted from making purchases, and this distinction was critical in determining both the user experience and permissions. 
   - Admins focus solely on product management.
 
-- **Basic Authentication**: 
-  - I've implemented a simple username-password authentication without encryption, focusing on the core functionalities of the platform.
+- **Stock Management**: 
+  - For simplicity, stock management decreases after an order is placed.
 
 
 ## Learnings and Challenges
@@ -63,4 +63,4 @@ The platform comes with pre-configured user accounts for demonstration purposes:
 
 ## Trade-offs and Decisions
 - **Simple Authentication**: 
-  - Instead of implementing a more complex authentication system (e.g., OAuth or token-based), I opted for basic username-password authentication to focus on core functionality.
+  - Instead of implementing a more complex authentication system (e.g., OAuth or token-based), I opted for basic username-password authentication to focus on core functionality of the platform.
