@@ -265,6 +265,8 @@ def place_order():
     return redirect(url_for('cart'))
 
 
+
+
 @app.route('/remove_from_cart/<int:product_id>', methods=['POST'])
 def remove_from_cart(product_id):
     if 'username' not in session:

@@ -69,8 +69,9 @@ class TestApp(unittest.TestCase):
             self.assertIsNotNone(product)
             self.assertEqual(product[1], 'Test Product')
 
-    # Test Order Placement
-    def test_add_cart(self):
+
+    # Test add to cart and Order Placement
+    def test_add_cart_and_place_order(self):
         # Simulate user login
         with self.app:
             login_response = self.app.post('/login', data=dict(
@@ -82,7 +83,7 @@ class TestApp(unittest.TestCase):
             self.assertEqual(login_response.status_code, 200)
 
             # Simulate adding the product to the cart
-            response = self.app.post('/add_to_cart/1', follow_redirects=True)
+            response = self.app.post('/add_to_cart/8', follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             # Query the database to ensure the product was added to cart
@@ -90,10 +91,22 @@ class TestApp(unittest.TestCase):
             self.c.execute("SELECT * FROM cart WHERE username = ?", ('testuser',))
             cart = self.c.fetchone()
 
-            # Check if the produt exists in the table cart in the database
+            # Check if the product exists in the cart
             self.assertIsNotNone(cart)
             self.assertEqual(cart[1], 'testuser')
 
+            # Simulate placing the order after adding to the cart
+            response = self.app.post('/place_order', follow_redirects=True)  # Data can be included if necessary
+            self.assertEqual(response.status_code, 200)
+
+            # Query the database to ensure the order was placed
+            self.conn.commit()
+            self.c.execute("SELECT * FROM orders WHERE username = ?", ('testuser',))
+            order = self.c.fetchone()
+
+            # Check if the order exists in the database
+            self.assertIsNotNone(order)
+            self.assertEqual(order[1], 'testuser')
 
 if __name__ == '__main__':
     unittest.main()
