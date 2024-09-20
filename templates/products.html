@@ -16,8 +16,10 @@
 
     <button onclick="window.location.href='/profile'">Go to Profile</button>
     <br>
-    <br>
-    <button onclick="window.location.href='/cart'">Go to Cart</button>
+    {% if role != 'admin' %}
+        <br>
+        <button onclick="window.location.href='/cart'">Go to Cart</button>
+    {% endif %}
 
     <h2>Available Products</h2>
 

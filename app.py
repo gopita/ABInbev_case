@@ -88,18 +88,19 @@ def products():
 
     username = session['username']
 
-    # Fetch user info (including name) from the database
+    # Fetch user info (including name and role) from the database
     conn = auth.get_db_connection()
     c = conn.cursor()
-    c.execute("SELECT name FROM users WHERE username = ?", (username,))
+    c.execute("SELECT name, role FROM users WHERE username = ?", (username,))
     user = c.fetchone()
 
     # Fetch products from the database
     all_products = Product.get_all_products()
 
-    # Pass the user's name to the template
-    return render_template('products.html', products=all_products, name=user['name'])
+    # Pass the user's name and role to the template
+    return render_template('products.html', products=all_products, name=user['name'], role=user['role'])
 
+    
 # Cart Route
 @app.route('/cart')
 def cart():
@@ -107,6 +108,16 @@ def cart():
         return redirect(url_for('login'))
 
     username = session['username']
+
+    # Fetch the user's role from the database
+    role = User.get_role(username)
+
+    # Check if the user is an admin, deny access to the cart page if true
+    if role == 'admin':
+        flash('Admins do not have access to the cart page.', 'danger')
+        return redirect(url_for('products'))  # Redirect them to the products page or another page
+
+    # Fetch the cart items for the regular user
     cart_items = Cart.get_cart(username)
 
     return render_template('cart.html', cart_items=cart_items)
