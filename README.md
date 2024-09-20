@@ -45,8 +45,8 @@ The platform comes with pre-configured user accounts for demonstration purposes:
 
 
 ## Learnings and Challenges
-- **Session Management**: 
-  - Implementing role-based session management was critical to ensuring the correct user experience. I had to ensure the admin could only manage products, while regular users could add items to the cart and place orders.
+- **Testing**: 
+  - Writing unit tests for features like user registration, product addition, and order placement was a learning process, especially in terms of mocking sessions and simulating different user actions.
 
 - **Cart and Order Flow**: 
   - Understanding the flow between adding items to a cart and placing an order was crucial, and required handling edge cases like cart clearing post-order.
@@ -56,9 +56,8 @@ The platform comes with pre-configured user accounts for demonstration purposes:
 - **Role-Based Access**: 
   - The system differentiates between admins and regular users, with customized experiences and restrictions. For example, only admins can manage products, while regular users can place orders.
 
-- **Separation of Responsibilities**: 
-  - Admins handle product management, while regular users manage their shopping experience. This clear separation helped avoid feature bloat and made user actions more predictable.
-
+- **Modular Approach**: 
+  - The project was implemented in a modular way, with separate models for User, Cart, Order, and Product, which allowed for more straightforward unit testing and isolated functionality.
 
 ## Trade-offs and Decisions
 - **Simple Authentication**: 
