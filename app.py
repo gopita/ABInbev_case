@@ -100,6 +100,92 @@ def products():
     # Pass the user's name and role to the template
     return render_template('products.html', products=all_products, name=user['name'], role=user['role'])
 
+# Add Product Route (admin only)
+@app.route('/add_product', methods=['GET', 'POST'])
+def add_product():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    username = session['username']
+
+    # Fetch the user's role
+    role = User.get_role(username)
+
+    if role != 'admin':
+        flash('Only admins can add products.', 'danger')
+        return redirect(url_for('products'))
+
+    if request.method == 'POST':
+        name = request.form['name']
+        price = float(request.form['price'])
+        stock = int(request.form['stock'])
+        description = request.form['description']
+
+        # Save the new product
+        product = Product(name=name, price=price, stock=stock, description=description)
+        product.save()
+
+        flash('Product added successfully!', 'success')
+        return redirect(url_for('products'))
+
+    return render_template('add_product.html')
+
+
+# Edit Product Route (admin only)
+@app.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
+def edit_product(product_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    username = session['username']
+    
+    # Fetch the user's role
+    role = User.get_role(username)
+
+    if role != 'admin':
+        flash('Only admins can edit products.', 'danger')
+        return redirect(url_for('products'))
+
+    # Fetch product by id
+    product = Product.get_by_id(product_id)
+
+    if request.method == 'POST':
+        name = request.form['name']
+        price = float(request.form['price'])
+        stock = int(request.form['stock'])
+        description = request.form['description']
+
+        # Ensure that the product ID is passed to the update method
+        updated_product = Product(id=product_id)
+        updated_product.update(product_id, name, price, stock, description)
+
+        flash('Product updated successfully!', 'success')
+        return redirect(url_for('products'))
+
+    return render_template('edit_product.html', product=product)
+
+
+# Remove Product Route (admin only)
+@app.route('/remove_product/<int:product_id>', methods=['POST'])
+def remove_product(product_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    username = session['username']
+
+    # Fetch the user's role
+    role = User.get_role(username)
+
+    if role != 'admin':
+        flash('Only admins can remove products.', 'danger')
+        return redirect(url_for('products'))
+
+    # Remove the product
+    Product.remove(product_id)
+
+    flash('Product removed successfully!', 'success')
+    return redirect(url_for('products'))
+
 
 # Cart Route
 @app.route('/cart')
@@ -177,7 +263,7 @@ def place_order():
         flash('Order placed successfully!', 'success')
 
     return redirect(url_for('cart'))
-    
+
 
 @app.route('/remove_from_cart/<int:product_id>', methods=['POST'])
 def remove_from_cart(product_id):

@@ -16,6 +16,7 @@
 
     <button onclick="window.location.href='/profile'">Go to Profile</button>
     <br>
+    <!-- Only show the "Go to Cart" button if the user is not an admin -->
     {% if role != 'admin' %}
         <br>
         <button onclick="window.location.href='/cart'">Go to Cart</button>
@@ -43,11 +44,25 @@
             {% if role != 'admin' %}
                 <button onclick="window.location.href='/add_to_cart/{{ product.id }}'">Add to Cart</button>
             {% endif %}
+
+            <!-- Admin options: Edit and Remove -->
+            {% if role == 'admin' %}
+                <button onclick="window.location.href='/edit_product/{{ product.id }}'">Edit</button>
+                <form method="POST" action="/remove_product/{{ product.id }}" style="display:inline;">
+                    <button type="submit">Remove</button>
+                </form>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
 
-    <br>
+    <!-- Admin: Add Product Button -->
+    {% if role == 'admin' %}
+        <br>
+        <button onclick="window.location.href='/add_product'">Add New Product</button>
+    {% endif %}
+
+    <br><br>
     <a href="/logout">Logout</a>
 </body>
 </html>

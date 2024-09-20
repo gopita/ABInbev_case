@@ -46,7 +46,8 @@ class User:
 
 # Product Model
 class Product:
-    def __init__(self, name, price, stock, description):
+    def __init__(self, id=None, name=None, price=None, stock=None, description=None):
+        self.id = id
         self.name = name
         self.price = price
         self.stock = stock
@@ -68,6 +69,33 @@ class Product:
                   (self.name, self.price, self.stock, self.description))
         conn.commit()
         conn.close()
+
+    @staticmethod
+    def get_by_id(product_id):
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("SELECT id, name, price, stock, description FROM products WHERE id = ?", (product_id,))
+        product = c.fetchone()
+        conn.close()
+        return {'id': product[0], 'name': product[1], 'price': product[2], 'stock': product[3], 'description': product[4]}
+
+    def update(self, id, name, price, stock, description):
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        # Ensure that the product ID is correctly passed to the SQL query
+        c.execute("UPDATE products SET name = ?, price = ?, stock = ?, description = ? WHERE id = ?",
+                  (name, price, stock, description, id))
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def remove(product_id):
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("DELETE FROM products WHERE id = ?", (product_id,))
+        conn.commit()
+        conn.close()
+
 
 
 # Cart Model
