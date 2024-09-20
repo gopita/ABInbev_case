@@ -39,7 +39,10 @@
         <li>
             <strong>{{ product.name }}</strong> - ${{ product.price }} - Stock: {{ product.stock }}<br>
             <em>Description:</em> {{ product.description }}<br>
-            <button onclick="window.location.href='/add_to_cart/{{ product.id }}'">Add to Cart</button>
+            <!-- Only show the "Add to Cart" button if the user is not an admin -->
+            {% if role != 'admin' %}
+                <button onclick="window.location.href='/add_to_cart/{{ product.id }}'">Add to Cart</button>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
@@ -48,7 +51,3 @@
     <a href="/logout">Logout</a>
 </body>
 </html>
-
-
-
-

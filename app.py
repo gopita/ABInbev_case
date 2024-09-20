@@ -100,7 +100,7 @@ def products():
     # Pass the user's name and role to the template
     return render_template('products.html', products=all_products, name=user['name'], role=user['role'])
 
-    
+
 # Cart Route
 @app.route('/cart')
 def cart():
@@ -130,14 +130,20 @@ def add_to_cart(product_id):
 
     username = session['username']
 
-    # For simplicity, adding one quantity of the product
+    # Fetch the user's role from the database
+    role = User.get_role(username)
+
+    # If the user is an admin, deny access to add items to the cart
+    if role == 'admin':
+        flash('Admins cannot add products to the cart.', 'danger')
+        return redirect(url_for('products'))  # Redirect them to the products page
+
+    # For non-admin users, add the product to the cart
     Cart.add_to_cart(username, product_id, 1)
 
-    # Flash a success message
     flash('Product added to cart!', 'success')
-
-    # Redirect to the products page
     return redirect(url_for('products'))
+
 
 # Place Order Route
 @app.route('/place_order', methods=['POST'])
@@ -146,6 +152,16 @@ def place_order():
         return redirect(url_for('login'))
 
     username = session['username']
+
+    # Fetch the user's role from the database
+    role = User.get_role(username)
+
+    # If the user is an admin, deny access to place orders
+    if role == 'admin':
+        flash('Admins cannot place orders.', 'danger')
+        return redirect(url_for('products'))  # Redirect to the products page
+
+    # Fetch cart items and place the order for non-admin users
     cart_items = Cart.get_cart(username)
 
     if cart_items:
@@ -161,7 +177,7 @@ def place_order():
         flash('Order placed successfully!', 'success')
 
     return redirect(url_for('cart'))
-
+    
 
 @app.route('/remove_from_cart/<int:product_id>', methods=['POST'])
 def remove_from_cart(product_id):
