@@ -34,3 +34,33 @@ The platform comes with pre-configured user accounts for demonstration purposes:
 2. Install dependencies by running `pip install -r requirements.txt`.
 3. Run the `app.py` file using `python app.py`.
 4. Run tests using `python -m unittest tests.py`.
+
+
+## Assumptions Made
+- **Admin vs. Regular User Roles**: 
+  - Admin users are restricted from making purchases, and this distinction was critical in determining both the user experience and permissions. 
+  - Admins focus solely on product management.
+
+- **Basic Authentication**: 
+  - I've implemented a simple username-password authentication without encryption, focusing on the core functionalities of the platform.
+
+
+## Learnings and Challenges
+- **Session Management**: 
+  - Implementing role-based session management was critical to ensuring the correct user experience. I had to ensure the admin could only manage products, while regular users could add items to the cart and place orders.
+
+- **Cart and Order Flow**: 
+  - Understanding the flow between adding items to a cart and placing an order was crucial, and required handling edge cases like cart clearing post-order.
+
+
+## Approach Taken
+- **Role-Based Access**: 
+  - The system differentiates between admins and regular users, with customized experiences and restrictions. For example, only admins can manage products, while regular users can place orders.
+
+- **Separation of Responsibilities**: 
+  - Admins handle product management, while regular users manage their shopping experience. This clear separation helped avoid feature bloat and made user actions more predictable.
+
+
+## Trade-offs and Decisions
+- **Simple Authentication**: 
+  - Instead of implementing a more complex authentication system (e.g., OAuth or token-based), I opted for basic username-password authentication to focus on core functionality.
