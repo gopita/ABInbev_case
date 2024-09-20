@@ -1,4 +1,4 @@
-# ML Enginner Code Challenge
+# ML Engineer Code Challenge
 
 
 This project is a simple e-commerce platform where users can browse products, add them to their cart, and place orders. Admin users can manage the product listings by adding, editing, and removing products from the platform.
