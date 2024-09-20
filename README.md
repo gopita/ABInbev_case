@@ -38,8 +38,7 @@ The platform comes with pre-configured user accounts for demonstration purposes:
 
 ## Assumptions Made
 - **Admin vs. Regular User Roles**: 
-  - Admin users are restricted from making purchases, and this distinction was critical in determining both the user experience and permissions. 
-  - Admins focus solely on product management.
+  - Admin users are restricted from making purchases, and this distinction was critical in determining both the user experience and permissions.
 
 - **Stock Management**: 
   - For simplicity, stock management decreases after an order is placed.
